@@ -5,7 +5,7 @@ VisualStudioVersion = 17.14.36221.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentACarDB", "RentACarDB\RentACarDB.csproj", "{3A8A8ABC-7DA3-4A0C-9819-29605589FABE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "rentAcarWiew", "..\rentAcarWiew\rentAcarWiew\rentAcarWiew.csproj", "{4202CF62-B841-1D17-89CA-54E8E23F3D17}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "rentAcarView", "..\rentAcarWiew\rentAcarWiew\rentAcarView.csproj", "{4202CF62-B841-1D17-89CA-54E8E23F3D17}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
