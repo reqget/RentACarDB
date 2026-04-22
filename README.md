@@ -23,11 +23,12 @@ It consists of two parts: an API for backend operations and a UI for user intera
 
 ---
 
+
+
 ## Screenshots
 
-![Home](renAcarView/home.png)
-![Cars](renAcarView/cars.png)
-
+![Home](rentAcarView/home.png)
+![Cars](rentAcarView/cars.png)
 ---
 
 ## Usage
