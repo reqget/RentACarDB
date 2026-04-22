@@ -23,6 +23,13 @@ It consists of two parts: an API for backend operations and a UI for user intera
 
 ---
 
+## Screenshots
+
+![Home](renAcarView/home.png)
+![Cars](renAcarView/cars.png)
+
+---
+
 ## Usage
 
 Run both projects to use the system:
