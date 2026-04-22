@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Müşteri Kayıt</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap" rel="stylesheet" />
+    <style>
+        /* Stil kodları aynı kalabilir */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Rubik', sans-serif;
+            background: linear-gradient(to bottom right, #0077cc, #66ccff);
+            background-image: url('https://images.unsplash.com/photo-1549921296-3a4c7a8d31f0?auto=format&fit=crop&w=1470&q=80');
+            background-size: cover;
+            background-position: center;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 51, 102, 0.7);
+            z-index: 1;
+        }
+
+        .title {
+            position: absolute;
+            top: 30px;
+            left: 40px;
+            z-index: 3;
+            font-size: 36px;
+            color: #fff;
+            font-weight: bold;
+            text-shadow: 1px 1px 5px rgba(0,0,0,0.4);
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 30px;
+            max-width: 900px;
+            width: 90%;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+        }
+
+            .container h2 {
+                text-align: center;
+                color: #fff;
+                margin-bottom: 25px;
+            }
+
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: space-between;
+        }
+
+        .form-group {
+            flex: 1 1 45%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 6px;
+            color: #fff;
+            font-weight: 500;
+        }
+
+        input {
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 15px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 20px;
+            background: #007bff;
+            color: white;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+            button:hover {
+                background: #0056b3;
+            }
+
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+            }
+
+            .form-group {
+                flex: 1 1 100%;
+            }
+
+            .title {
+                font-size: 28px;
+                left: 20px;
+                top: 20px;
+            }
+
+            .container {
+                margin: 80px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="overlay"></div>
+    <h1 class="title">Rent Car</h1>
+
+    <form class="container" id="musteriFormu" novalidate>
+        <h2>Müşteri Kayıt</h2>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="customerName">Ad:</label>
+                <input type="text" id="customerName" name="name" required />
+            </div>
+
+            <div class="form-group">
+                <label for="customerLastName">Soyad:</label>
+                <input type="text" id="customerLastName" name="surname" required />
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="CustomerBirthDate">Doğum Tarihi:</label>
+                <input type="date" id="CustomerBirthDate" name="CustomerBirthDate" required />
+            </div>
+
+            <div class="form-group">
+                <label for="CustomerEmail">E-posta:</label>
+                <input type="email" id="CustomerEmail" name="CustomerEmail" required />
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="CustomerTellNo">Telefon:</label>
+                <input type="tel" id="CustomerTellNo" name="CustomerTellNo" placeholder="05XXXXXXXXX" required />
+            </div>
+
+            <div class="form-group">
+                <label for="customerPassword">Şifre:</label>
+                <input type="password" id="customerPassword" name="password" required />
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="Cities">Şehir:</label>
+                <input type="text" id="Cities" name="Cities" required />
+            </div>
+
+            <div class="form-group">
+                <label for="District">İlçe:</label>
+                <input type="text" id="District" name="District" required />
+            </div>
+        </div>
+
+        <div class="form-row">
+            <button type="button" onclick="ekle()">Kayıt Ol</button>
+            <button type="button" class="vazgec" onclick="formuTemizle()">Vazgeç</button>
+        </div>
+    </form>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+        function formuTemizle() {
+            document.getElementById("musteriFormu").reset();
+        }
+
+        function ekle() {
+            var form = document.getElementById("musteriFormu");
+
+            if (!form.checkValidity()) {
+                alert("Lütfen tüm zorunlu alanları doldurun.");
+                form.reportValidity();
+                return;
+            }
+
+            var formdata = new FormData(form);
+
+            $.ajax({
+                url: "https://localhost:7250/api/Customer/Add",
+                type: "POST",
+                data: formdata,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    alert("Kayıt başarılı.");
+                    console.log("Gelen response:", response);
+
+                    const id = response?.data?.customerId;
+                    const name = response?.data?.customerName;
+
+                    if (id && name) {
+                        // LocalStorage'a kaydet
+                        localStorage.setItem("userId", id);
+                        localStorage.setItem("userName", name);
+
+                        // index.html sayfasına yönlendir
+                        window.location.href = "index.html";
+                    } else {
+                        alert("Kayıt başarılı ama kullanıcı bilgileri alınamadı.");
+                    }
+                },
+                error: function (xhr) {
+                    console.error("Hata:", xhr.responseText);
+                    alert("Hata oluştu: " + xhr.responseText);
+                }
+            });
+        }
+    </script>
+
+
+
+</body>
+</html>

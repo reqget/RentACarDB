@@ -1,0 +1,358 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Kiralama Ekleme</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: #fff;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 40px;
+            font-weight: 600;
+            color: #333;
+            font-size: 2.2rem;
+        }
+
+        .info-box {
+            background-color: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border: 1px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+            .info-box:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+            }
+
+            .info-box h4 {
+                margin-bottom: 15px;
+                color: #007bff;
+                font-weight: 600;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+
+                .info-box h4 i {
+                    font-size: 1.2rem;
+                }
+
+            .info-box p {
+                color: #555;
+                line-height: 1.6;
+                margin-bottom: 0;
+            }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            font-weight: 500;
+            color: #444;
+            margin-bottom: 8px;
+        }
+
+        .form-control {
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+
+            .form-control:focus {
+                border-color: #007bff;
+                box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+            }
+
+        .btn {
+            padding: 12px 25px;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #007bff;
+            border: none;
+        }
+
+            .btn-primary:hover {
+                background: #0056b3;
+                transform: translateY(-2px);
+            }
+
+        .btn-secondary {
+            background: #6c757d;
+            border: none;
+            margin-top: 15px;
+        }
+
+            .btn-secondary:hover {
+                background: #545b62;
+                transform: translateY(-2px);
+            }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 30px;
+            color: #007bff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+            .back-link:hover {
+                color: #0056b3;
+                text-decoration: none;
+                transform: translateX(-5px);
+            }
+
+        .price-box {
+            background: #e8f4ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+
+            .price-box label {
+                color: #0056b3;
+            }
+
+            .price-box .form-control {
+                font-weight: 600;
+                color: #0056b3;
+                background: white;
+            }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 20px;
+                padding: 20px;
+            }
+
+            h2 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Araç Kiralama</h2>
+
+        <div class="info-box">
+            <h4><i class="fas fa-car"></i> Araç Bilgileri</h4>
+            <p id="carInfo">Yükleniyor...</p>
+        </div>
+
+        <div class="info-box">
+            <h4><i class="fas fa-user"></i> Müşteri Bilgileri</h4>
+            <p id="customerInfo">Yükleniyor...</p>
+        </div>
+
+        <form id="kiralamaFormu">
+            <input type="hidden" id="carID" name="carID" />
+            <input type="hidden" id="customerID" name="customerID" />
+
+            <div class="form-group">
+                <label for="startDate"><i class="far fa-calendar-alt"></i> Başlangıç Tarihi</label>
+                <input type="date" class="form-control" id="startDate" name="startDate" required />
+            </div>
+
+            <div class="form-group">
+                <label for="endDate"><i class="far fa-calendar-alt"></i> Bitiş Tarihi</label>
+                <input type="date" class="form-control" id="endDate" name="endDate" required />
+            </div>
+
+            <div class="form-group price-box">
+                <label for="totalPrice"><i class="fas fa-money-bill-wave"></i> Toplam Fiyat</label>
+                <input type="text" class="form-control" id="totalPrice" name="totalPrice" readonly />
+            </div>
+
+            <button type="button" class="btn btn-primary w-100" onclick="ekle()">
+                <i class="fas fa-check"></i> Kiralamayı Tamamla
+            </button>
+            <button type="button" class="btn btn-secondary w-100" onclick="formuTemizle()">
+                <i class="fas fa-times"></i> Vazgeç
+            </button>
+        </form>
+
+        <a href="car.html" class="back-link">
+            <i class="fas fa-arrow-left"></i> Araç Listesine Dön
+        </a>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+        let carData = null;
+        let customerData = null;
+
+        function formuTemizle() {
+            document.getElementById("kiralamaFormu").reset();
+            calculateTotalPrice();
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const params = new URLSearchParams(window.location.search);
+            const carId = params.get("carId");
+            const userId = params.get("userId");
+
+            console.log("Sayfa yüklenirken alınan parametreler:", { carId, userId });
+
+            if (!carId || !userId) {
+                alert("Gerekli bilgiler eksik!");
+                window.location.href = "car.html";
+                return;
+            }
+
+            document.getElementById("carID").value = carId;
+            document.getElementById("customerID").value = userId;
+
+            // Araç bilgilerini getir
+            fetch(`https://localhost:7250/api/Car/Find?id=${carId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log("Araç bilgileri alındı:", data);
+                    carData = data;
+                    document.getElementById("carInfo").innerHTML = `
+                            <strong>Marka:</strong> ${data.brand}<br>
+                            <strong>Model:</strong> ${data.model}<br>
+                            <strong>Günlük Fiyat:</strong> ${data.dailyPrice}₺
+                        `;
+                })
+                .catch(error => {
+                    console.error("Araç bilgileri alınamadı:", error);
+                    document.getElementById("carInfo").innerHTML = "Araç bilgileri yüklenemedi. Hata: " + error.message;
+                });
+
+            // Müşteri bilgilerini getir
+            fetch(`https://localhost:7250/api/Customer/Find?id=${userId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log("Müşteri bilgileri alındı:", data);
+                    customerData = data;
+                    document.getElementById("customerInfo").innerHTML = `
+                            <strong>Ad:</strong> ${data.name}<br>
+                            <strong>Soyad:</strong> ${data.surname}<br>
+                            <strong>Email:</strong> ${data.customerEmail}
+                        `;
+                })
+                .catch(error => {
+                    console.error("Müşteri bilgileri alınamadı:", error);
+                    document.getElementById("customerInfo").innerHTML = "Müşteri bilgileri yüklenemedi. Hata: " + error.message;
+                });
+        });
+
+        // Tarih değişikliklerini dinle
+        document.getElementById("startDate").addEventListener("change", calculateTotalPrice);
+        document.getElementById("endDate").addEventListener("change", calculateTotalPrice);
+
+        function calculateTotalPrice() {
+            const startDate = new Date(document.getElementById("startDate").value);
+            const endDate = new Date(document.getElementById("endDate").value);
+
+            if (startDate && endDate && carData) {
+                const diffTime = Math.abs(endDate - startDate);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+                const totalPrice = diffDays * carData.dailyPrice;
+                document.getElementById("totalPrice").value = totalPrice + "₺";
+            } else {
+                document.getElementById("totalPrice").value = "";
+            }
+        }
+
+        function ekle() {
+            const startDate = document.getElementById("startDate").value;
+            const endDate = document.getElementById("endDate").value;
+
+            if (!startDate || !endDate) {
+                alert("Lütfen başlangıç ve bitiş tarihlerini seçiniz!");
+                return;
+            }
+
+            if (new Date(startDate) > new Date(endDate)) {
+                alert("Başlangıç tarihi bitiş tarihinden sonra olamaz!");
+                return;
+            }
+
+            var formData = new FormData();
+            formData.append("carID", document.getElementById("carID").value);
+            formData.append("customerID", document.getElementById("customerID").value);
+            formData.append("startDate", startDate);
+            formData.append("endDate", endDate);
+            formData.append("avaible", true); // Varsayılan olarak true
+            formData.append("totalPrice", document.getElementById("totalPrice").value.replace("₺", ""));
+
+            console.log("Gönderilecek kiralama verisi:", {
+                carID: formData.get("carID"),
+                customerID: formData.get("customerID"),
+                startDate: formData.get("startDate"),
+                endDate: formData.get("endDate"),
+                avaible: formData.get("avaible"),
+                totalPrice: formData.get("totalPrice")
+            });
+
+            fetch("https://localhost:7250/api/Rental/Add", {
+                method: "POST",
+                body: formData
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(response => {
+                    console.log("Kiralama başarılı:", response);
+                    alert("Kiralama başarıyla eklendi.");
+                    window.location.href = "car.html";
+                })
+                .catch(error => {
+                    console.error("Kiralama eklenirken hata:", error);
+                    alert("Hata oluştu: " + error.message);
+                });
+        }
+    </script>
+</body>
+</html> 

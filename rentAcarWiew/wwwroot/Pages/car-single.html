@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+	<title>Rent-Car-Araba Detayları</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
+	<link rel="stylesheet" href="css/animate.css">
+	<link rel="stylesheet" href="css/owl.carousel.min.css">
+	<link rel="stylesheet" href="css/owl.theme.default.min.css">
+	<link rel="stylesheet" href="css/magnific-popup.css">
+	<link rel="stylesheet" href="css/aos.css">
+	<link rel="stylesheet" href="css/ionicons.min.css">
+	<link rel="stylesheet" href="css/bootstrap-datepicker.css">
+	<link rel="stylesheet" href="css/jquery.timepicker.css">
+	<link rel="stylesheet" href="css/flaticon.css">
+	<link rel="stylesheet" href="css/icomoon.css">
+	<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+	<div id="navbar"></div>
+
+	<section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('images/bg_3.jpg');" data-stellar-background-ratio="0.5">
+		<div class="overlay"></div>
+		<div class="container">
+			<div class="row no-gutters slider-text js-fullheight align-items-end justify-content-start">
+				<div class="col-md-9 ftco-animate pb-5">
+					<p class="breadcrumbs">
+						<span class="mr-2"><a href="index.html">Ana Sayfa <i class="ion-ios-arrow-forward"></i></a></span>
+						<span class="mr-2"><a href="car.html">Arabalar <i class="ion-ios-arrow-forward"></i></a></span>
+						<span>Araba Detayları <i class="ion-ios-arrow-forward"></i></span>
+					</p>
+					<h1 class="mb-3 bread">Araba Detayları</h1>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="ftco-section ftco-car-details">
+		<div class="container">
+			<div class="row" id="arabaDetay">
+				<!-- Araba detayları buraya gelecek -->
+			</div>
+		</div>
+	</section>
+
+	<div id="footer"></div>
+
+	<!-- loader -->
+	<div id="ftco-loader" class="show fullscreen">
+		<svg class="circular" width="48px" height="48px">
+			<circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" />
+			<circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00" />
+		</svg>
+	</div>
+
+	<!-- Scripts -->
+	<script src="js/jquery.min.js"></script>
+	<script src="js/jquery-migrate-3.0.1.min.js"></script>
+	<script src="js/popper.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/jquery.easing.1.3.js"></script>
+	<script src="js/jquery.waypoints.min.js"></script>
+	<script src="js/jquery.stellar.min.js"></script>
+	<script src="js/owl.carousel.min.js"></script>
+	<script src="js/jquery.magnific-popup.min.js"></script>
+	<script src="js/aos.js"></script>
+	<script src="js/jquery.animateNumber.min.js"></script>
+	<script src="js/bootstrap-datepicker.js"></script>
+	<script src="js/jquery.timepicker.min.js"></script>
+	<script src="js/scrollax.min.js"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE&sensor=false"></script>
+	<script src="js/google-map.js"></script>
+	<script src="js/main.js"></script>
+
+	<script>
+		async function loadHTML(id, url, callback) {
+			const res = await fetch(url);
+			const html = await res.text();
+			document.getElementById(id).innerHTML = html;
+			if (callback) callback();
+		}
+
+		// Navbar ve kullanıcı bilgileri
+		loadHTML("navbar", "navbar.html", () => {
+			const storedName = localStorage.getItem("userName");
+			if (storedName) {
+				const userNameText = document.getElementById("userNameText");
+				if (userNameText) {
+					userNameText.textContent = storedName;
+					userNameText.style.color = "black";
+
+					const userNameNavItem = document.getElementById("userNameNavItem");
+					if (userNameNavItem) userNameNavItem.style.display = "flex";
+				}
+			}
+
+			// Araba detaylarını getir
+			arabaDetayGetir();
+		});
+
+		// Footer yükle
+		loadHTML("footer", "footer.html");
+
+		function kirala(carId) {
+			const userId = localStorage.getItem("userId");
+
+			if (!userId || userId === "null" || userId === "undefined") {
+				alert("Lütfen önce giriş yapınız!");
+				window.location.href = "signup.html";
+				return;
+			}
+
+			window.location.href = `kiralama-ekle.html?carId=${carId}&userId=${userId}`;
+		}
+
+		function arabaDetayGetir() {
+			const urlParams = new URLSearchParams(window.location.search);
+			const carId = urlParams.get('carId');
+
+			if (!carId) {
+				document.getElementById("arabaDetay").innerHTML = "<p>Araba bilgisi bulunamadı.</p>";
+				return;
+			}
+
+			fetch("https://localhost:7250/api/Car/List")
+				.then(response => response.json())
+				.then(data => {
+					const car = data.find(item => item.carsId == carId);
+
+					if (!car) {
+						document.getElementById("arabaDetay").innerHTML = "<p>Araba bilgisi bulunamadı.</p>";
+						return;
+					}
+
+					const detayHTML = `
+							<div class="col-md-12">
+								<div class="car-details">
+									<div class="img rounded" style="background-image: url('https://localhost:7250/uploads/cars/${car.imageName || 'default.jpg'}'); height: 400px; background-size: cover;"></div>
+									<div class="text text-center">
+										<h2>${car.brand} ${car.model}</h2>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-12 mt-4">
+								<div class="row">
+									<div class="col-md-4">
+										<div class="car-details-box p-4 mb-3 bg-light">
+											<h3>Marka</h3>
+											<p>${car.brand}</p>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="car-details-box p-4 mb-3 bg-light">
+											<h3>Model</h3>
+											<p>${car.model}</p>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="car-details-box p-4 mb-3 bg-light">
+											<h3>Yıl</h3>
+											<p>${car.year}</p>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="car-details-box p-4 mb-3 bg-light">
+											<h3>Kilometre</h3>
+											<p>50.000 km</p>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="car-details-box p-4 mb-3 bg-light">
+											<h3>Yakıt Tipi</h3>
+											<p>Benzin</p>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="car-details-box p-4 mb-3 bg-light">
+											<h3>Günlük Fiyat</h3>
+											<p>${car.dailyPrice}₺</p>
+										</div>
+									</div>
+								</div>
+								<div class="text-center mt-4">
+									<a href="#" class="btn btn-primary py-3 px-5" onclick="kirala(${car.carsId})">Hemen Kirala</a>
+									<a href="car.html" class="btn btn-secondary py-3 px-5 ml-2">Arabalara Dön</a>
+								</div>
+							</div>
+						`;
+					document.getElementById("arabaDetay").innerHTML = detayHTML;
+				})
+				.catch(err => {
+					console.error("Araba detayları çekilirken hata:", err);
+					document.getElementById("arabaDetay").innerHTML = "<p>Araba bilgileri yüklenirken bir hata oluştu.</p>";
+				});
+		}
+	</script>
+</body>
+</html>
